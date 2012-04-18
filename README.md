@@ -43,7 +43,7 @@ below the current paragraph:
 
     [vim]: 
 
-This currently only works for Markdown, not ReST.
+This also works in ReST for reference links like `` `foo`_``.
 
 ## All Together Now
 
@@ -63,7 +63,6 @@ your bundles directory. Otherwise, place the `autolink.vim` file into your
 
 # To-Do
 
-* Definition insertion for ReST.
 * Automatic activation when completing a link reference (i.e., after typing `]`
   in Markdown)?
 * Optionally use the link text, rather than the reference ID, as the search

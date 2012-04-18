@@ -88,6 +88,37 @@ function! ReSTDefComplete()
     execute "normal! a".url."\<esc>"
 endfunction
 
+" Insert a link definition like .. _foo:
+function! ReSTDefCreate()
+    " Find a link: `foo`_
+    call search('\v`\_[^`]+`', 'bc')
+    " TODO: ensure the text doesn't contain <>, indicating an inline link.
+
+    " Get the text of the link.
+    execute "normal! \"myi`"
+    let key = @m
+
+    " Remove newlines from the key.
+    let key = substitute(key, '\n', ' ', 'g')
+
+    " Insert the link definition after the current paragraph.
+    execute "normal! }"
+    if line('.') == line('$')
+        " Last line in buffer. Make a blank line.
+        execute "normal! o\<esc>"
+    endif
+    execute "normal! o.. _".key.": \<esc>"
+
+    " Make a blank line after the new definition if the next line is (a) not
+    " blank and (b) not another link definition.
+    if line('.') != line('$')
+        let nextline = getline(line('.')+1)
+        if match(nextline, '\v^\s*\.\.') == -1
+            execute "normal! o\<esc>k$"
+        endif
+    endif
+endfunction
+
 
 " Main entry functions and default bindings.
 
@@ -101,8 +132,8 @@ endfunction
 function! AutoLinkDefCreate()
     if &filetype == "markdown"
         call MarkdownDefCreate()
-    "elseif &filetype == "rst"
-    "    call ReSTDefCreate()
+    elseif &filetype == "rst"
+        call ReSTDefCreate()
     endif
 endfunction
 function! AutoLinkCombined()
