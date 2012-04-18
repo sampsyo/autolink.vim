@@ -1,11 +1,17 @@
-autolink.vim
-============
+# autolink.vim
 
-Automatically find and insert URLs for links in Markdown and ReST documents.
+This vim plugin automatically finds and inserts URLs for links in Markdown and
+ReST documents.
 
-This vim plugin uses the [Blekko][] search engine API to find URLs matching the
+## Search for URLs
+
+autolink.vim uses the [Blekko][] search engine API to find URLs matching the
 link IDs in [Markdown][] and [reStructuredText][] reference-style links. It
 automatically inserts the first link found.
+
+[Markdown]: http://daringfireball.net/projects/markdown/
+[reStructuredText]: http://docutils.sourceforge.net/rst.html
+[Blekko]: http://blekko.com/
 
 For example, say you have this document:
 
@@ -23,12 +29,23 @@ inserts the first result's URL, a reasonable guess for a relevant link on the
 subject, in the appropriate place. This also works in ReST documents on
 hyperlink target lines like `.. _Markdown: link goes here`.
 
-[Blekko]: http://blekko.com/
-[Markdown]: http://daringfireball.net/projects/markdown/
-[reStructuredText]: http://docutils.sourceforge.net/rst.html
+## Create Link Definitions
 
-Using the Plugin
-----------------
+This plugin can help you insert the markup for reference-style links. For
+example, suppose you have just typed this paragraph:
+
+    I prefer the [vim text editor][vim].
+
+Type ``<leader>am`` (for *auto-make*) to add a definition for the link below
+the current paragraph:
+
+    I prefer the [vim text editor][vim].
+
+    [vim]: 
+
+This currently only works for Markdown, not ReST.
+
+# Installing
 
 The plugin requires vim to be built with Python bindings (to communicate with
 the Blekko API). If you're using [Pathogen][], just clone this repository into
@@ -37,14 +54,13 @@ your bundles directory. Otherwise, place the `autolink.vim` file into your
 
 [Pathogen]: https://github.com/tpope/vim-pathogen
 
-To-Do
------
+# To-Do
 
-* Insert link definitions automatically. There should be a command that takes
-  the link reference under the cursor, creates a definition for it after the
-  current paragraph, and optionally searches for a link in one fell swoop. This
-  could even be activated automatically when completing a link reference (i.e.,
-  after typing `]` in Markdown).
+
+* Combined definition insertion and search completion.
+* Definition insertion for ReST.
+* Automatic activation when completing a link reference (i.e., after typing `]`
+  in Markdown).
 * Optionally use the link text, rather than the reference ID, as the search
   terms.
 * Options to use subsequent results (if the first link isn't good).
@@ -53,8 +69,7 @@ To-Do
 * Move code to an "autoload" file?
 * Add to the vimscripts directory.
 
-Credits
--------
+# Credits
 
 This plugin is by me, Adrian Sampson. This is my first bit of vimscript hackery
 and is very experimental---I apologize for weirdnesses arising from my

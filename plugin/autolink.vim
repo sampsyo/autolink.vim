@@ -42,6 +42,41 @@ function! MarkdownDefComplete()
     execute "normal! a".url."\<esc>"
 endfunction
 
+function! MarkdownDefCreate()
+    " Find a Markdown reference link: [foo][bar]
+    call search('\[\_[^\]]*\]\[\_[^\]]*\]', 'bc')
+
+    " Try to get the explicit link reference key.
+    execute "normal! /]\<CR>l\"myi]"
+    let key = @m
+
+    " If the key is empty, then the key is the link text itself.
+    if key == ""
+        execute "normal! ?[\<CR>?[\<CR>\"myi]"
+        let key = @m
+    endif
+
+    " Remove newlines from the key.
+    let key = substitute(key, '\n', ' ', 'g')
+
+    " Insert the link definition after the current paragraph.
+    execute "normal! }"
+    if line('.') == line('$')
+        " Last line in buffer. Make a blank line.
+        execute "normal! o\<esc>"
+    endif
+    execute "normal! o[".key."]: \<esc>"
+
+    " Make a blank line after the new definition if the next line is (a) not
+    " blank and (b) not another link definition.
+    if line('.') != line('$')
+        let nextline = getline(line('.')+1)
+        if match(nextline, '\v^\s*\[') == -1
+            execute "normal! o\<esc>k$"
+        endif
+    endif
+endfunction
+
 
 " ReST
 
@@ -56,6 +91,7 @@ endfunction
 " Set up bindings.
 function! AutoLinkMarkdownBindings()
     nnoremap <Leader>al :call MarkdownDefComplete()<CR>
+    nnoremap <Leader>am :call MarkdownDefCreate()<CR>
 endfunction
 function! AutoLinkReSTBindings()
     nnoremap <Leader>al :call ReSTDefComplete()<CR>
@@ -69,6 +105,7 @@ augroup END
 
 
 " The python-blekko module, inlined.
+
 python << ENDPYTHON
 """Bindings for the Blekko search API."""
 import urllib
