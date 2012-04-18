@@ -1,0 +1,71 @@
+*autolink.txt*   quickly search for and insert link targets
+
+{autolink.vim} helps create and fill out reference-style links in Markdown and
+reStructuredText documents. It uses the Blekko search engine API to find
+plausible URLs without the hassle of opening a Web browser.
+
+This plugin provides three functions that are mapped to key sequences by
+default in Markdown and reStructuredText buffers. The functions are
+|AutoLinkDefComplete|, |AutoLinkDefCreate|, and |AutoLinkCombined|. The
+functions are mapped to <Leader>ac, <Leader>am, and <Leader>al, respectively,
+for the markdown and rst filetypes.
+
+==============================================================================
+Definition Completion (Searching)                        *AutoLinkDefComplete*
+
+The {AutoLinkDefComplete} function, mapped by default to <Leader>ac, works
+when the cursor is on a line containing a link reference: {[foo]: target} in
+Markdown or {.. _foo: target} in ReST. It searches using the Blekko search
+engine API for a URL matching the link name and inserts a URL.
+
+For example, invoking completion on this line in a Markdown document:
+
+    [Markdown]: need a URL for this
+
+changes the line to this:
+
+    [Markdown]: http://daringfireball.net/projects/markdown/
+
+==============================================================================
+Definition Insertion                                       *AutoLinkDefCreate*
+
+The {AutoLinkDefCreate} function searches for a nearby link in ReST or
+Markdown text and inserts a definition for that link below the current
+paragraph. For example, invoking the function after typing this paragraph:
+
+    I prefer the [vim text editor][vim].
+
+results in adding a line defining the {vim} reference:
+
+    I prefer the [vim text editor][vim].
+
+    [vim]: 
+
+The cursor is placed at the end of the new line. In Markdown, this works both
+for explicit link keys like {[foo][bar]} and implicit ones like {[foo][]}. In
+ReST, this works for links like {`foo`_}.
+
+The function searches for the nearest link that starts at or before the
+current cursor position. This means that it will operate on the link you want
+if your cursor is anywhere inside the link or just after it (e.g., after
+finishing the sentence containing the link), but not if the cursor is to the
+left of the link you want.
+
+Link definitions are added after a blank line under the current paragraph. If
+the next "paragraph" starts with what looks like an existing link definition,
+then the new definition is inserted adjacent to existing ones. Otherwise,
+whitespace is added to separate the new definition from the following
+paragraph.
+
+==============================================================================
+Insert + Complete                                        *AutoLinkDefCombined*
+
+The {AutoLinkDefCombined} function inserts a definition for a nearby link,
+completes it with a URL from a Blekko search, and returns your cursor to its
+previous position. This makes it possible to add link definitions without
+interrupting your writing flow.
+
+The function sets a mark, calls |AutoLinkDefCreate|, calls
+|AutoLinkDefComplete|, and then jumps back to the mark.
+
+ vim:tw=78:ts=8:ft=help:norl:

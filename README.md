@@ -59,8 +59,8 @@ jump back to your current cursor position to let you keep writing. (If your lead
 
 The plugin requires vim to be built with Python bindings (to communicate with
 the Blekko API). If you're using [Pathogen][], just clone this repository into
-your bundles directory. Otherwise, place the `autolink.vim` file into your
-`plugins` directory.
+your bundles directory (and run `:Helptags`). Otherwise, place the
+`autolink.vim` file into your `plugins` directory.
 
 [Pathogen]: https://github.com/tpope/vim-pathogen
 
@@ -72,7 +72,6 @@ your bundles directory. Otherwise, place the `autolink.vim` file into your
   terms.
 * Options to use subsequent results (if the first link isn't good).
 * Handle web service errors (avoid inserting "None", possible retry).
-* Include vim help files.
 * Move code to an "autoload" file?
 * Add to the vimscripts directory.
 
