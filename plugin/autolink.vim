@@ -23,7 +23,7 @@ ENDPYTHON
 
 
 " Get a Blekko result URL.
-function! LinkForTerms(terms)
+function! s:link_for_terms(terms)
 python << ENDPYTHON
 terms = vim.eval("a:terms")
 link = get_link(terms)
@@ -34,7 +34,7 @@ endfunction
 
 " Jump after the paragraph, adding a blank line if necessary (at the end of the
 " file).
-function! AfterParagraph()
+function! s:after_paragraph()
     execute "normal! }"
     if line('.') == line('$')
         " Last line in buffer. Make a blank line.
@@ -44,7 +44,7 @@ endfunction
 
 " Make a blank line after the current one if the next line exists and does not
 " match a regex (i.e., another link definition).
-function! BlankLineIfNextDoesNotMatch(pat)
+function! s:blank_line_if_next_does_not_match(pat)
     if line('.') != line('$')
         let nextline = getline(line('.')+1)
         if match(nextline, a:pat) == -1
@@ -57,14 +57,14 @@ endfunction
 " Markdown
 
 " Insert a search result URL for an existing Markdown link definition.
-function! MarkdownDefComplete()
+function! s:markdown_complete()
     execute "normal! ^l\"myt]f]c$]: \<esc>"
-    let url = LinkForTerms(@m)
+    let url = s:link_for_terms(@m)
     execute "normal! a".url."\<esc>"
 endfunction
 
 " Add a definition for a nearby link after the current paragraph.
-function! MarkdownDefCreate()
+function! s:markdown_create()
     " Find a Markdown reference link: [foo][bar]
     call search('\[\_[^\]]*\]\[\_[^\]]*\]', 'bc')
 
@@ -82,23 +82,23 @@ function! MarkdownDefCreate()
     let key = substitute(key, '\n', ' ', 'g')
 
     " Insert the link definition after the current paragraph.
-    call AfterParagraph()
+    call s:after_paragraph()
     execute "normal! o[".key."]: \<esc>"
-    call BlankLineIfNextDoesNotMatch('\v^\s*\[')
+    call s:blank_line_if_next_does_not_match('\v^\s*\[')
 endfunction
 
 
 " ReST
 
 " Insert a search result for a ReST link definition.
-function! ReSTDefComplete()
+function! s:rest_complete()
     execute "normal! ^f_l\"myt:f:c$: \<esc>"
-    let url = LinkForTerms(@m)
+    let url = s:link_for_terms(@m)
     execute "normal! a".url."\<esc>"
 endfunction
 
 " Insert a link definition like .. _foo:
-function! ReSTDefCreate()
+function! s:rest_create()
     " Find a link: `foo`_
     call search('\v`\_[^`]+`', 'bc')
     " TODO: ensure the text doesn't contain <>, indicating an inline link.
@@ -109,9 +109,9 @@ function! ReSTDefCreate()
     let key = substitute(key, '\n', ' ', 'g')
 
     " Insert the link definition after the current paragraph.
-    call AfterParagraph()
+    call s:after_paragraph()
     execute "normal! o.. _".key.": \<esc>"
-    call BlankLineIfNextDoesNotMatch('\v^\s*\.\.')
+    call s:blank_line_if_next_does_not_match('\v^\s*\.\.')
 endfunction
 
 
@@ -119,16 +119,16 @@ endfunction
 
 function! AutoLinkDefComplete()
     if &filetype == "markdown"
-        call MarkdownDefComplete()
+        call s:markdown_complete()
     elseif &filetype == "rst"
-        call ReSTDefComplete()
+        call s:rest_complete()
     endif
 endfunction
 function! AutoLinkDefCreate()
     if &filetype == "markdown"
-        call MarkdownDefCreate()
+        call s:markdown_create()
     elseif &filetype == "rst"
-        call ReSTDefCreate()
+        call s:rest_create()
     endif
 endfunction
 function! AutoLinkCombined()
