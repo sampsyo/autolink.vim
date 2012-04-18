@@ -161,7 +161,7 @@ endfunction
 
 " Insert a search result URL for an existing Markdown link definition.
 function! MarkdownDefComplete()
-    execute "normal! ^l\"myt]f:c$: \<esc>"
+    execute "normal! ^l\"myt]f]c$]: \<esc>"
     let url = LinkForTerms(@m)
     execute "normal! a".url."\<esc>"
 endfunction

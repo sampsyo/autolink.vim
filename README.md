@@ -48,8 +48,7 @@ To-Do
 * Optionally use the link text, rather than the reference ID, as the search
   terms.
 * Options to use subsequent results (if the first link isn't good).
-* More robust link insertion macros (don't require a : at the end of the
-  Markdown link reference, etc.).
+* More robust link insertion macros.
 * Include vim help files.
 * Move code to an "autoload" file?
 * Add to the vimscripts directory.
