@@ -42,6 +42,7 @@ function! MarkdownDefComplete()
     execute "normal! a".url."\<esc>"
 endfunction
 
+" Add a definition for a nearby link after the current paragraph.
 function! MarkdownDefCreate()
     " Find a Markdown reference link: [foo][bar]
     call search('\[\_[^\]]*\]\[\_[^\]]*\]', 'bc')
@@ -77,6 +78,15 @@ function! MarkdownDefCreate()
     endif
 endfunction
 
+" Make a definition, search for a link, and jump back to the old cursor
+" position.
+function! MarkdownCombined()
+    execute "normal! mq"
+    call MarkdownDefCreate()
+    call MarkdownDefComplete()
+    execute "normal! `q"
+endfunction
+
 
 " ReST
 
@@ -90,11 +100,12 @@ endfunction
 
 " Set up bindings.
 function! AutoLinkMarkdownBindings()
-    nnoremap <Leader>al :call MarkdownDefComplete()<CR>
+    nnoremap <Leader>ac :call MarkdownDefComplete()<CR>
     nnoremap <Leader>am :call MarkdownDefCreate()<CR>
+    nnoremap <Leader>al :call MarkdownCombined()<CR>
 endfunction
 function! AutoLinkReSTBindings()
-    nnoremap <Leader>al :call ReSTDefComplete()<CR>
+    nnoremap <Leader>ac :call ReSTDefComplete()<CR>
 endfunction
 augroup AutoLink
     autocmd!

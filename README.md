@@ -19,8 +19,8 @@ For example, say you have this document:
 
     [Markdown]: need a URL for this
 
-With your cursor on the last line, you can type ``<leader>al`` (for
-*auto-link*) and the last line will become:
+With your cursor on the last line, you can type ``<leader>ac`` (for
+*auto-complete* link) and the last line will become:
 
     [Markdown]: http://daringfireball.net/projects/markdown/
 
@@ -36,14 +36,21 @@ example, suppose you have just typed this paragraph:
 
     I prefer the [vim text editor][vim].
 
-Type ``<leader>am`` (for *auto-make*) to add a definition for the link below
-the current paragraph:
+Type ``<leader>am`` (for *auto-make* link) to add a definition for the link
+below the current paragraph:
 
     I prefer the [vim text editor][vim].
 
     [vim]: 
 
 This currently only works for Markdown, not ReST.
+
+## All Together Now
+
+To insert and complete a link definition in one fell swoop, use ``<leader>al``
+(for *auto-link*, the name of this plugin). This will add a reference to your
+link after the current paragraph, fill it out with a search result, and then
+jump back to your current cursor position to let you keep writing. (If your leader is `\`, then it's like typing ``mq\am\ac`q``.)
 
 # Installing
 
