@@ -72,7 +72,6 @@ your bundles directory (and run `:Helptags`). Otherwise, place files in
   terms.
 * Options to use subsequent results (if the first link isn't good).
 * Handle web service errors (avoid inserting "None", possible retry).
-* Add to the vimscripts directory.
 
 # Credits
 
