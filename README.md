@@ -43,7 +43,10 @@ below the current paragraph:
 
     [vim]: 
 
-This also works in ReST for reference links like `` `foo`_``.
+This also works in ReST for reference-style links like `` `foo`_``.
+
+The plugin is careful to insert newlines between text paragraphs and blocks of
+link references to make your document look nice.
 
 ## All Together Now
 
@@ -79,8 +82,16 @@ This plugin is by me, Adrian Sampson. This is my first bit of vimscript hackery
 and is very experimental---I apologize for weirdnesses arising from my
 unfamiliarity with writing vim plugins.
 
+The first-search-result idea is shamelessly borrowed from [Brett Terpstra][],
+whose ingenious ["Lucky Link" service for Mac OS X][luckylink] is the first
+place I saw this kind of functionality.
+
+[luckylink]: http://brettterpstra.com/automated-search-and-link-text-service/
+[Brett Terpstra]: http://brettterpstra.com/
+
 The code is available under the [MIT license][]. The plugin contains an inlined
-copy of [python-blekko][], which is under the same license.
+copy of [python-blekko][], which is under the same license. My thanks to the
+kind folks at [Blekko][] for providing free access to their search API.
 
 [MIT license]: http://www.opensource.org/licenses/MIT
 [python-blekko]: https://github.com/sampsyo/python-blekko 
