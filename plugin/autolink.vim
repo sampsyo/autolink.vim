@@ -78,15 +78,6 @@ function! MarkdownDefCreate()
     endif
 endfunction
 
-" Make a definition, search for a link, and jump back to the old cursor
-" position.
-function! MarkdownCombined()
-    execute "normal! mq"
-    call MarkdownDefCreate()
-    call MarkdownDefComplete()
-    execute "normal! `q"
-endfunction
-
 
 " ReST
 
@@ -98,19 +89,37 @@ function! ReSTDefComplete()
 endfunction
 
 
-" Set up bindings.
-function! AutoLinkMarkdownBindings()
-    nnoremap <Leader>ac :call MarkdownDefComplete()<CR>
-    nnoremap <Leader>am :call MarkdownDefCreate()<CR>
-    nnoremap <Leader>al :call MarkdownCombined()<CR>
+" Main entry functions and default bindings.
+
+function! AutoLinkDefComplete()
+    if &filetype == "markdown"
+        call MarkdownDefComplete()
+    elseif &filetype == "rst"
+        call ReSTDefComplete()
+    endif
 endfunction
-function! AutoLinkReSTBindings()
-    nnoremap <Leader>ac :call ReSTDefComplete()<CR>
+function! AutoLinkDefCreate()
+    if &filetype == "markdown"
+        call MarkdownDefCreate()
+    "elseif &filetype == "rst"
+    "    call ReSTDefCreate()
+    endif
+endfunction
+function! AutoLinkCombined()
+    execute "normal! mq"
+    call AutoLinkDefCreate()
+    call AutoLinkDefComplete()
+    execute "normal! `q"
+endfunction
+
+function! AutoLinkDefaultBindings()
+    nnoremap <Leader>ac :call AutoLinkDefComplete()<CR>
+    nnoremap <Leader>am :call AutoLinkDefCreate()<CR>
+    nnoremap <Leader>al :call AutoLinkCombined()<CR>
 endfunction
 augroup AutoLink
     autocmd!
-    autocmd FileType markdown :call AutoLinkMarkdownBindings()
-    autocmd FileType rst :call AutoLinkReSTBindings()
+    autocmd FileType markdown,rst :call AutoLinkDefaultBindings()
 augroup END
 
 

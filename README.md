@@ -63,15 +63,13 @@ your bundles directory. Otherwise, place the `autolink.vim` file into your
 
 # To-Do
 
-
-* Combined definition insertion and search completion.
 * Definition insertion for ReST.
 * Automatic activation when completing a link reference (i.e., after typing `]`
-  in Markdown).
+  in Markdown)?
 * Optionally use the link text, rather than the reference ID, as the search
   terms.
 * Options to use subsequent results (if the first link isn't good).
-* More robust link insertion macros.
+* Handle web service errors (avoid inserting "None", possible retry).
 * Include vim help files.
 * Move code to an "autoload" file?
 * Add to the vimscripts directory.
