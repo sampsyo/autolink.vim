@@ -32,6 +32,27 @@ ENDPYTHON
     return link_out
 endfunction
 
+" Jump after the paragraph, adding a blank line if necessary (at the end of the
+" file).
+function! AfterParagraph()
+    execute "normal! }"
+    if line('.') == line('$')
+        " Last line in buffer. Make a blank line.
+        execute "normal! o\<esc>"
+    endif
+endfunction
+
+" Make a blank line after the current one if the next line exists and does not
+" match a regex (i.e., another link definition).
+function! BlankLineIfNextDoesNotMatch(pat)
+    if line('.') != line('$')
+        let nextline = getline(line('.')+1)
+        if match(nextline, a:pat) == -1
+            execute "normal! o\<esc>k$"
+        endif
+    endif
+endfunction
+
 
 " Markdown
 
@@ -61,21 +82,9 @@ function! MarkdownDefCreate()
     let key = substitute(key, '\n', ' ', 'g')
 
     " Insert the link definition after the current paragraph.
-    execute "normal! }"
-    if line('.') == line('$')
-        " Last line in buffer. Make a blank line.
-        execute "normal! o\<esc>"
-    endif
+    call AfterParagraph()
     execute "normal! o[".key."]: \<esc>"
-
-    " Make a blank line after the new definition if the next line is (a) not
-    " blank and (b) not another link definition.
-    if line('.') != line('$')
-        let nextline = getline(line('.')+1)
-        if match(nextline, '\v^\s*\[') == -1
-            execute "normal! o\<esc>k$"
-        endif
-    endif
+    call BlankLineIfNextDoesNotMatch('\v^\s*\[')
 endfunction
 
 
@@ -97,26 +106,12 @@ function! ReSTDefCreate()
     " Get the text of the link.
     execute "normal! \"myi`"
     let key = @m
-
-    " Remove newlines from the key.
     let key = substitute(key, '\n', ' ', 'g')
 
     " Insert the link definition after the current paragraph.
-    execute "normal! }"
-    if line('.') == line('$')
-        " Last line in buffer. Make a blank line.
-        execute "normal! o\<esc>"
-    endif
+    call AfterParagraph()
     execute "normal! o.. _".key.": \<esc>"
-
-    " Make a blank line after the new definition if the next line is (a) not
-    " blank and (b) not another link definition.
-    if line('.') != line('$')
-        let nextline = getline(line('.')+1)
-        if match(nextline, '\v^\s*\.\.') == -1
-            execute "normal! o\<esc>k$"
-        endif
-    endif
+    call BlankLineIfNextDoesNotMatch('\v^\s*\.\.')
 endfunction
 
 
