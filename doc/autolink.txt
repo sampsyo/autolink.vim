@@ -6,14 +6,14 @@ plausible URLs without the hassle of opening a Web browser.
 
 This plugin provides three functions that are mapped to key sequences by
 default in Markdown and reStructuredText buffers. The functions are
-|AutoLinkDefComplete|, |AutoLinkDefCreate|, and |AutoLinkCombined|. The
+|autolink#DefComplete|, |autolink#DefCreate|, and |autolink#Combined|. The
 functions are mapped to <Leader>ac, <Leader>am, and <Leader>al, respectively,
 for the markdown and rst filetypes.
 
 ==============================================================================
-Definition Completion (Searching)                        *AutoLinkDefComplete*
+Definition Completion (Searching)                       *autolink#DefComplete*
 
-The {AutoLinkDefComplete} function, mapped by default to <Leader>ac, works
+The {autolink#DefComplete} function, mapped by default to <Leader>ac, works
 when the cursor is on a line containing a link reference: {[foo]: target} in
 Markdown or {.. _foo: target} in ReST. It searches using the Blekko search
 engine API for a URL matching the link name and inserts a URL.
@@ -27,9 +27,9 @@ changes the line to this:
     [Markdown]: http://daringfireball.net/projects/markdown/
 
 ==============================================================================
-Definition Insertion                                       *AutoLinkDefCreate*
+Definition Insertion                                      *autolink#DefCreate*
 
-The {AutoLinkDefCreate} function searches for a nearby link in ReST or
+The {autolink#DefCreate} function searches for a nearby link in ReST or
 Markdown text and inserts a definition for that link below the current
 paragraph. For example, invoking the function after typing this paragraph:
 
@@ -58,9 +58,9 @@ whitespace is added to separate the new definition from the following
 paragraph.
 
 ==============================================================================
-Insert + Complete                                        *AutoLinkDefCombined*
+Insert + Complete                                          *autolink#Combined*
 
-The {AutoLinkDefCombined} function inserts a definition for a nearby link,
+The {autolink#Combined} function inserts a definition for a nearby link,
 completes it with a URL from a Blekko search, and returns your cursor to its
 previous position. This makes it possible to add link definitions without
 interrupting your writing flow.
