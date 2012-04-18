@@ -2,6 +2,72 @@
 " documents. Uses the Blekko search API to find the first result for the link
 " reference text.
 
+
+" Python support functionality.
+python << ENDPYTHON
+import vim
+_api = None
+def get_link(terms):
+    # Lazily initialize API singleton.
+    global _api
+    if not _api:
+        _api = Blekko(source='410a531a')
+    # Perform query.
+    try:
+        res = _api.query(terms + ' /ps=1')
+    except BlekkoError as exc:
+        return None
+    if len(res):
+        return res[0].url
+ENDPYTHON
+
+
+" Get a Blekko result URL.
+function! LinkForTerms(terms)
+python << ENDPYTHON
+terms = vim.eval("a:terms")
+link = get_link(terms)
+vim.command("let link_out='{}'".format(link))
+ENDPYTHON
+    return link_out
+endfunction
+
+
+" Markdown
+
+" Insert a search result URL for an existing Markdown link definition.
+function! MarkdownDefComplete()
+    execute "normal! ^l\"myt]f]c$]: \<esc>"
+    let url = LinkForTerms(@m)
+    execute "normal! a".url."\<esc>"
+endfunction
+
+
+" ReST
+
+" Insert a search result for a ReST link definition.
+function! ReSTDefComplete()
+    execute "normal! ^f_l\"myt:f:c$: \<esc>"
+    let url = LinkForTerms(@m)
+    execute "normal! a".url."\<esc>"
+endfunction
+
+
+" Set up bindings.
+function! AutoLinkMarkdownBindings()
+    nnoremap <Leader>al :call MarkdownDefComplete()<CR>
+endfunction
+function! AutoLinkReSTBindings()
+    nnoremap <Leader>al :call ReSTDefComplete()<CR>
+endfunction
+augroup AutoLink
+    autocmd!
+    autocmd FileType markdown :call AutoLinkMarkdownBindings()
+    autocmd FileType rst :call AutoLinkReSTBindings()
+augroup END
+
+
+
 " The python-blekko module, inlined.
 python << ENDPYTHON
 """Bindings for the Blekko search API."""
@@ -133,55 +199,3 @@ class Blekko(object):
         })
         return json.loads(data)
 ENDPYTHON
-
-" Python support functionality.
-python << ENDPYTHON
-import vim
-
-_api = Blekko(source='410a531a')
-
-def get_link(terms):
-    try:
-        res = _api.query(terms + ' /ps=1')
-    except BlekkoError as exc:
-        return None
-    if len(res):
-        return res[0].url
-ENDPYTHON
-
-" Get a Blekko result URL.
-function! LinkForTerms(terms)
-python << ENDPYTHON
-terms = vim.eval("a:terms")
-link = get_link(terms)
-vim.command("let link_out='{}'".format(link))
-ENDPYTHON
-    return link_out
-endfunction
-
-" Insert a search result URL for an existing Markdown link definition.
-function! MarkdownDefComplete()
-    execute "normal! ^l\"myt]f]c$]: \<esc>"
-    let url = LinkForTerms(@m)
-    execute "normal! a".url."\<esc>"
-endfunction
-
-" Insert a search result for a ReST link definition.
-function! ReSTDefComplete()
-    execute "normal! ^f_l\"myt:f:c$: \<esc>"
-    let url = LinkForTerms(@m)
-    execute "normal! a".url."\<esc>"
-endfunction
-
-" Set up bindings.
-function! AutoLinkMarkdownBindings()
-    nnoremap <Leader>al :call MarkdownDefComplete()<CR>
-endfunction
-function! AutoLinkReSTBindings()
-    nnoremap <Leader>al :call ReSTDefComplete()<CR>
-endfunction
-augroup AutoLink
-    autocmd!
-    autocmd FileType markdown :call AutoLinkMarkdownBindings()
-    autocmd FileType rst :call AutoLinkReSTBindings()
-augroup END
