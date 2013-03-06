@@ -1,7 +1,8 @@
 # autolink.vim
 
 This vim plugin automatically finds and inserts URLs for links in Markdown and
-ReST documents.
+ReST documents. You can use a search engine (Blekko) or the current tab in
+Safari or Chrome.
 
 ## Search for URLs
 
@@ -48,12 +49,22 @@ This also works in ReST for reference-style links like `` `foo`_``.
 The plugin is careful to insert newlines between text paragraphs and blocks of
 link references to make your document look nice.
 
+## Grab a Browser Tab
+
+You can also grab the URL for your browser's current tab and insert that. (This
+currently works for Safari and Chrome and only on OS X.) Just type
+``<leader>aB`` and the URL will appear (magically!) at your cursor.
+
 ## All Together Now
 
 To insert and complete a link definition in one fell swoop, use ``<leader>al``
 (for *auto-link*, the name of this plugin). This will add a reference to your
 link after the current paragraph, fill it out with a search result, and then
-jump back to your current cursor position to let you keep writing. (If your leader is `\`, then it's like typing ``mq\am\ac`q``.)
+jump back to your current cursor position to let you keep writing. (If your
+leader is `\`, then it's like typing ``mq\am\ac`q``.)
+
+To do this with your browser's foremost tab instead, type ``<leader>ab`` (the
+*b* is for *browser*).
 
 # Installing
 

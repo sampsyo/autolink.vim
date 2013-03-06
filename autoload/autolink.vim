@@ -113,6 +113,53 @@ function! s:rest_create()
 endfunction
 
 
+" Snooping URLs from browser tabs.
+
+function! s:applescript_url_for_browser(browser)
+    if a:browser == "safari"
+        let app = "Safari"
+        let script = 'return URL of current tab of window 1'
+    elseif a:browser == "chrome"
+        let app = "Google Chrome"
+        let script = 'return URL of active tab of window 1'
+    endif
+
+    " Check whether the process is running.
+    let pcount = system("osascript -e " . shellescape(
+        \ 'tell application "System Events" to count ' .
+        \ '(every process whose name is "' . app . '")'))
+    if pcount[0] == '0'
+        return 0
+    endif
+
+    " Run the AppleScript.
+    let script = 'tell application "' . app . '" to ' . script
+    let res = system("osascript -e " . shellescape(script))
+    let res = substitute(res, '\n$', '', '')
+    return res
+endfunction
+
+function! s:applescript_url_any()
+    " Ensure we're running on OS X.
+    call system("which osascript")
+    if v:shell_error != 0
+        echo 'this only works on OS X'
+        return 0
+    endif
+
+    " Try Safari and then Chrome.
+    let url = s:applescript_url_for_browser("safari")
+    if url != '0'
+        return url
+    endif
+    let url = s:applescript_url_for_browser("chrome")
+    if url != '0'
+        return url
+    endif
+    return 0
+endfunction
+
+
 " Main entry functions and default bindings.
 
 function! autolink#DefComplete()
@@ -133,6 +180,18 @@ function! autolink#Combined()
     execute "normal! mq"
     call autolink#DefCreate()
     call autolink#DefComplete()
+    execute "normal! `q"
+endfunction
+function! autolink#AppendBrowserURL()
+    let url = s:applescript_url_any()
+    if url != '0'
+        execute "normal! a" . url
+    endif
+endfunction
+function! autolink#CombinedBrowser()
+    execute "normal! mq"
+    call autolink#DefCreate()
+    call autolink#AppendBrowserURL()
     execute "normal! `q"
 endfunction
 
