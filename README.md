@@ -94,10 +94,11 @@ The first-search-result idea is shamelessly borrowed from [Brett Terpstra][],
 whose ingenious ["Lucky Link" service for Mac OS X][luckylink] is the first
 place I saw this kind of functionality.
 
-[luckylink]: http://brettterpstra.com/automated-search-and-link-text-service/
-[Brett Terpstra]: http://brettterpstra.com/
+[Jim Kalafut][kalafut] is responsible for switching the plugin over from the defunct Blekko API to DuckDuckGo. Thanks, Jim!
 
 The code is available under the [MIT license][].
 
+[luckylink]: http://brettterpstra.com/automated-search-and-link-text-service/
+[Brett Terpstra]: http://brettterpstra.com/
 [MIT license]: http://www.opensource.org/licenses/MIT
-[python-blekko]: https://github.com/sampsyo/python-blekko 
+[kalafut]: https://github.com/kalafut
