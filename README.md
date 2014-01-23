@@ -1,18 +1,18 @@
 # autolink.vim
 
 This vim plugin automatically finds and inserts URLs for links in Markdown and
-ReST documents. You can use a search engine (Blekko) or the current tab in
+ReST documents. You can use a search engine (DuckDuckGo) or the current tab in
 Safari or Chrome.
 
 ## Search for URLs
 
-autolink.vim uses the [Blekko][] search engine API to find URLs matching the
+autolink.vim uses the [DuckDuckGo][] search engine API to find URLs matching the
 link IDs in [Markdown][] and [reStructuredText][] reference-style links. It
 automatically inserts the first link found.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
 [reStructuredText]: http://docutils.sourceforge.net/rst.html
-[Blekko]: http://blekko.com/
+[DuckDuckGo]: http://duckduckgo.com/
 
 For example, say you have this document:
 
@@ -25,7 +25,7 @@ With your cursor on the last line, you can type ``<leader>ac`` (for
 
     [Markdown]: http://daringfireball.net/projects/markdown/
 
-Behind the scenes, the plugin searches on Blekko for the word "Markdown" and
+Behind the scenes, the plugin searches on DuckDuckGo for the word "Markdown" and
 inserts the first result's URL, a reasonable guess for a relevant link on the
 subject, in the appropriate place. This also works in ReST documents on
 hyperlink target lines like `.. _Markdown: link goes here`.
@@ -68,8 +68,8 @@ To do this with your browser's foremost tab instead, type ``<leader>ab`` (the
 
 # Installing
 
-The plugin requires vim to be built with Python bindings (to communicate with
-the Blekko API). If you're using [Pathogen][], just clone this repository into
+The plugin requires vim to be built with Python bindings.
+If you're using [Pathogen][], just clone this repository into
 your bundles directory (and run `:Helptags`). Otherwise, place files in
 `plugin`, `autoload`, and `doc` into the corresponding directories in `~/.vim`.
 
@@ -97,9 +97,7 @@ place I saw this kind of functionality.
 [luckylink]: http://brettterpstra.com/automated-search-and-link-text-service/
 [Brett Terpstra]: http://brettterpstra.com/
 
-The code is available under the [MIT license][]. The plugin contains an inlined
-copy of [python-blekko][], which is under the same license. My thanks to the
-kind folks at [Blekko][] for providing free access to their search API.
+The code is available under the [MIT license][].
 
 [MIT license]: http://www.opensource.org/licenses/MIT
 [python-blekko]: https://github.com/sampsyo/python-blekko 
