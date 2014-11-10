@@ -12,7 +12,7 @@ _api = None
 def get_link(terms):
     query = 'https://duckduckgo.com/html/?q={}'.format(terms.strip().replace(' ','+'))
     html = urllib2.urlopen(query).read()
-    for link in re.findall('div.*?web-result.*?href="(.*?)"', html, re.DOTALL):
+    for link in re.findall('div.*?web-result".*?href="(.*?)"', html, re.DOTALL):
         if "duckduckgo.com" not in link:
             return link
 ENDPYTHON
