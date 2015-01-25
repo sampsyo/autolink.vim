@@ -6,6 +6,7 @@ function! AutoLinkDefaultBindings()
     nnoremap <Leader>al :call autolink#Combined()<CR>
     nnoremap <Leader>aB :call autolink#AppendBrowserURL()<CR>
     nnoremap <Leader>ab :call autolink#CombinedBrowser()<CR>
+    nnoremap <Leader>as :call autolink#Search()<CR>
 endfunction
 augroup AutoLink
     autocmd!

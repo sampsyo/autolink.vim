@@ -7,14 +7,19 @@ import re
 import sys
 import urllib2
 import vim
+import webbrowser
 
-_api = None
 def get_link(terms):
-    query = 'https://duckduckgo.com/html/?q={}'.format(terms.strip().replace(' ','+'))
+    query = 'https://duckduckgo.com/html/?q={}'.format(
+        terms.strip().replace(' ','+')
+    )
     html = urllib2.urlopen(query).read()
     for link in re.findall('div.*?web-result".*?href="(.*?)"', html, re.DOTALL):
         if "duckduckgo.com" not in link:
             return link
+
+def open_search(terms):
+    webbrowser.open('https://google.com/search?q=' + urllib2.quote(terms))
 ENDPYTHON
 
 
@@ -59,8 +64,8 @@ function! s:markdown_complete()
     execute "normal! a".url."\<esc>"
 endfunction
 
-" Add a definition for a nearby link after the current paragraph.
-function! s:markdown_create()
+" Get the link key for a nearby Markdown link.
+function! s:markdown_get_key()
     " Find a Markdown reference link: [foo][bar]
     call search('\[\_[^\]]*\]\[\_[^\]]*\]', 'bc')
 
@@ -75,7 +80,12 @@ function! s:markdown_create()
     endif
 
     " Remove newlines from the key.
-    let key = substitute(key, '\n', ' ', 'g')
+    return substitute(key, '\n', ' ', 'g')
+endfunction
+
+" Add a definition for a nearby link after the current paragraph.
+function! s:markdown_create()
+    let key = s:markdown_get_key()
 
     " Insert the link definition after the current paragraph.
     call s:after_paragraph()
@@ -93,8 +103,8 @@ function! s:rest_complete()
     execute "normal! a".url."\<esc>"
 endfunction
 
-" Insert a link definition like .. _foo:
-function! s:rest_create()
+" Get the link key for a nearby ReST link.
+function! s:rest_get_key()
     " Find a link: `foo`_
     call search('\v`\_[^`]+`', 'bc')
     " TODO: ensure the text doesn't contain <>, indicating an inline link.
@@ -102,7 +112,12 @@ function! s:rest_create()
     " Get the text of the link.
     execute "normal! \"myi`"
     let key = @m
-    let key = substitute(key, '\n', ' ', 'g')
+    return substitute(key, '\n', ' ', 'g')
+endfunction
+
+" Insert a link definition like .. _foo:
+function! s:rest_create()
+    let key = s:rest_get_key()
 
     " Insert the link definition after the current paragraph.
     call s:after_paragraph()
@@ -158,6 +173,15 @@ function! s:applescript_url_any()
 endfunction
 
 
+" Opening a search in a browser.
+
+function! s:open_search(terms)
+python << ENDPYTHON
+open_search(vim.eval("a:terms"))
+ENDPYTHON
+endfunction
+
+
 " Main entry functions and default bindings.
 
 function! autolink#DefComplete()
@@ -191,4 +215,12 @@ function! autolink#CombinedBrowser()
     call autolink#DefCreate()
     call autolink#AppendBrowserURL()
     execute "normal! `q"
+endfunction
+function! autolink#Search()
+    if (&filetype == "markdown" || &filetype == "mkd")
+        let key = s:markdown_get_key()
+    elseif &filetype == "rst"
+        let key = s:rest_get_key()
+    endif
+    call s:open_search(key)
 endfunction

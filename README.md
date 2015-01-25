@@ -66,6 +66,10 @@ leader is `\`, then it's like typing ``mq\am\ac`q``.)
 To do this with your browser's foremost tab instead, type ``<leader>ab`` (the
 *b* is for *browser*).
 
+## Bonus: Open a Search
+
+Sometimes, you aren't feeling lucky. To open the current link's keys as Google search terms, type `\as` for *auto-search*. You can then click the result you want and flip back to `\ab` to insert the page you find.
+
 # Installing
 
 The plugin requires vim to be built with Python bindings.
