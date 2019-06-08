@@ -1,11 +1,11 @@
 " autolink.vim: find and insert URLs for links in Markdown and ReST
 
-
 " Python support functionality.
-python << ENDPYTHON
+python3 << ENDPYTHON
 import re
 import sys
-import urllib2
+import urllib.request
+import urllib.parse
 import vim
 import webbrowser
 
@@ -13,19 +13,19 @@ def get_link(terms):
     query = 'https://duckduckgo.com/html/?q={}'.format(
         terms.strip().replace(' ','+')
     )
-    html = urllib2.urlopen(query).read()
+    html = urllib.request.urlopen(query).read().decode('utf8')
     for link in re.findall('div.*?web-result".*?href="(.*?)"', html, re.DOTALL):
         if "duckduckgo.com" not in link:
             return link
 
 def open_search(terms):
-    webbrowser.open('https://google.com/search?q=' + urllib2.quote(terms))
+    webbrowser.open('https://google.com/search?q=' + urllib.parse.quote(terms))
 ENDPYTHON
 
 
 " Get a DuckDuckGo result URL.
 function! s:link_for_terms(terms)
-python << ENDPYTHON
+python3 << ENDPYTHON
 terms = vim.eval("a:terms")
 link = get_link(terms)
 vim.command("let link_out='{}'".format(link))
@@ -176,7 +176,7 @@ endfunction
 " Opening a search in a browser.
 
 function! s:open_search(terms)
-python << ENDPYTHON
+python3 << ENDPYTHON
 open_search(vim.eval("a:terms"))
 ENDPYTHON
 endfunction
