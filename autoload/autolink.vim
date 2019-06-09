@@ -1,27 +1,8 @@
 " autolink.vim: find and insert URLs for links in Markdown and ReST
 
-" Python support functionality.
-python3 << ENDPYTHON
-import re
-import sys
-import urllib.request
-import urllib.parse
-import vim
-import webbrowser
-
-def get_link(terms):
-    query = 'https://duckduckgo.com/html/?q={}'.format(
-        terms.strip().replace(' ','+')
-    )
-    html = urllib.request.urlopen(query).read().decode('utf8')
-    for link in re.findall('div.*?web-result".*?href="(.*?)"', html, re.DOTALL):
-        if "duckduckgo.com" not in link:
-            return link
-
-def open_search(terms):
-    webbrowser.open('https://google.com/search?q=' + urllib.parse.quote(terms))
-ENDPYTHON
-
+" Load our Python support module.
+let s:scriptpath = resolve(expand('<sfile>:p:h'))
+execute "py3file " . fnameescape(s:scriptpath . "/autolink.py")
 
 " Get a DuckDuckGo result URL.
 function! s:link_for_terms(terms)
