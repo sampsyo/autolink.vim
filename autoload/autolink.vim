@@ -6,11 +6,7 @@ execute "py3file " . fnameescape(s:scriptpath . "/autolink.py")
 
 " Get a DuckDuckGo result URL.
 function! s:link_for_terms(terms)
-python3 << ENDPYTHON
-terms = vim.eval("a:terms")
-link = get_link(terms)
-vim.command("let link_out='{}'".format(link))
-ENDPYTHON
+    python3 _vim_link_for_terms()
     return link_out
 endfunction
 
@@ -157,9 +153,7 @@ endfunction
 " Opening a search in a browser.
 
 function! s:open_search(terms)
-python3 << ENDPYTHON
-open_search(vim.eval("a:terms"))
-ENDPYTHON
+    python3 _vim_open_search()
 endfunction
 
 
