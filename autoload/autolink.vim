@@ -160,14 +160,14 @@ endfunction
 " Main entry functions and default bindings.
 
 function! autolink#DefComplete()
-    if (&filetype == "markdown" || &filetype == "mkd")
+    if (&filetype == "markdown" || &filetype == "mkd" || &filetype == "wiki")
         call s:markdown_complete()
     elseif &filetype == "rst"
         call s:rest_complete()
     endif
 endfunction
 function! autolink#DefCreate()
-    if (&filetype == "markdown" || &filetype == "mkd")
+    if (&filetype == "markdown" || &filetype == "mkd" || &filetype == "wiki")
         call s:markdown_create()
     elseif &filetype == "rst"
         call s:rest_create()
@@ -192,7 +192,7 @@ function! autolink#CombinedBrowser()
     execute "normal! `q"
 endfunction
 function! autolink#Search()
-    if (&filetype == "markdown" || &filetype == "mkd")
+    if (&filetype == "markdown" || &filetype == "mkd" || &filetype == "wiki")
         let key = s:markdown_get_key()
     elseif &filetype == "rst"
         let key = s:rest_get_key()

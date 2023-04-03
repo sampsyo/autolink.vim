@@ -10,5 +10,5 @@ function! AutoLinkDefaultBindings()
 endfunction
 augroup AutoLink
     autocmd!
-    autocmd FileType markdown,rst :call AutoLinkDefaultBindings()
+    autocmd FileType markdown,wiki,rst :call AutoLinkDefaultBindings()
 augroup END
